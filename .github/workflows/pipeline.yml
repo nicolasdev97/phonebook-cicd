@@ -1,13 +1,11 @@
-name: Phonebook Pipeline
+name: Deployment pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   pipeline:
@@ -16,46 +14,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       # BACKEND
-
       - name: Install backend dependencies
-        run: |
-          cd phonebook-backend
-          npm install
+        working-directory: ./phonebook-backend
+        run: npm install
 
       - name: Backend lint
-        run: |
-          cd phonebook-backend
-          npm run lint
+        working-directory: ./phonebook-backend
+        run: npm run lint
 
-      - name: Backend tests
-        run: |
-          cd phonebook-backend
-          npm test
+      - name: Backend test
+        working-directory: ./phonebook-backend
+        run: npm test
 
       # FRONTEND
-
       - name: Install frontend dependencies
-        run: |
-          cd phonebook-frontend
-          npm install
+        working-directory: ./phonebook-frontend
+        run: npm install
 
       - name: Frontend lint
-        run: |
-          cd phonebook-frontend
-          npm run lint
+        working-directory: ./phonebook-frontend
+        run: npm run lint
 
-      - name: Frontend tests
-        run: |
-          cd phonebook-frontend
-          npm test -- --run
+      - name: Frontend test
+        working-directory: ./phonebook-frontend
+        run: npm run test
 
       - name: Frontend build
-        run: |
-          cd phonebook-frontend
-          npm run build
+        working-directory: ./phonebook-frontend
+        run: npm run build
