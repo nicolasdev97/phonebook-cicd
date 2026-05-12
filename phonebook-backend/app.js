@@ -123,9 +123,11 @@ app.put("/api/persons/:id", (request, response, next) => {
 
 app.use(express.static("dist"));
 
-app.use((request, response) => {
-    response.sendFile(__dirname + "/dist/index.html");
-});
+const path = require('path')
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
+})
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: "unknown endpoint" });

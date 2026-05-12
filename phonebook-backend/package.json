@@ -10,7 +10,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest --runInBand",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build:ui": "rm -rf dist && cd ../phonebook-frontend && npm install && npm run build && cp -r dist ../phonebook-backend"
   },
   "dependencies": {
     "cors": "^2.8.5",
