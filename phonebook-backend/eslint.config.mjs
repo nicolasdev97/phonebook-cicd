@@ -1,15 +1,31 @@
-import js from "@eslint/js";
-import globals from "globals";
-import stylistic from "@stylistic/eslint-plugin";
-import { defineConfig, globalIgnores } from "eslint/config";
+import js from '@eslint/js'
+import globals from 'globals'
+import jest from 'eslint-plugin-jest'
 
-export default defineConfig([
-  { files: ["**/*.js"], languageOptions: { sourceType: "commonjs" } },
+export default [
   {
-    files: ["**/*.{js,mjs,cjs}"],
-    languageOptions: { globals: globals.node },
-    plugins: { js, stylistic },
-    extends: ["js/recommended"],
+    ignores: ['dist/**', 'node_modules/**'],
   },
-  globalIgnores(["./dist/", "./node_modules/"]),
-]);
+  js.configs.recommended,
+
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
+  {
+    files: ['tests/**/*.js'],
+    plugins: {
+      jest,
+    },
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+]

@@ -35,7 +35,7 @@ if (process.argv.length === 3) {
     mongoose.connection.close();
   });
 
-  return;
+  process.exit(1);
 }
 
 // Add a new person
