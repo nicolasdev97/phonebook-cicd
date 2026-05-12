@@ -1,0 +1,61 @@
+name: Phonebook Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # BACKEND
+
+      - name: Install backend dependencies
+        run: |
+          cd phonebook-backend
+          npm install
+
+      - name: Backend lint
+        run: |
+          cd phonebook-backend
+          npm run lint
+
+      - name: Backend tests
+        run: |
+          cd phonebook-backend
+          npm test
+
+      # FRONTEND
+
+      - name: Install frontend dependencies
+        run: |
+          cd phonebook-frontend
+          npm install
+
+      - name: Frontend lint
+        run: |
+          cd phonebook-frontend
+          npm run lint
+
+      - name: Frontend tests
+        run: |
+          cd phonebook-frontend
+          npm test -- --run
+
+      - name: Frontend build
+        run: |
+          cd phonebook-frontend
+          npm run build
