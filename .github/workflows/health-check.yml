@@ -1,27 +1,3 @@
-<<<<<<< Updated upstream
-=======
-name: Health Check
-
-on:
-  # schedule:
-  #   - cron: "0 */12 * * *"
-
-  workflow_dispatch:
-
-jobs:
-  health_check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Health check
-        uses: jtalk/url-health-check-action@v4
-        with:
-          url: https://phonebook-cicd-pbo9.onrender.com/health
-          max-attempts: 3
-          retry-delay: 5s
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 name: Health Check
 
 on:
@@ -41,4 +17,3 @@ jobs:
           url: https://TU-APP.onrender.com/health
           max-attempts: 3
           retry-delay: 5s
->>>>>>> Stashed changes
