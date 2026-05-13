@@ -119,6 +119,10 @@ app.put("/api/persons/:id", (request, response, next) => {
         .catch((error) => next(error));
 });
 
+app.get("/health", (req, res) => {
+    res.send("ok");
+});
+
 // Frontend integration
 
 app.use(express.static("dist"));
