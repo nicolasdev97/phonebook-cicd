@@ -2,25 +2,24 @@ name: Deployment pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
   pull_request:
     branches: [main]
+    types: [opened, synchronize]
 
 jobs:
-  pipeline:
+  simple_deployment_pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       # BACKEND
-      - name: Install backend dependencies
+
+      - name: Setup backend
         working-directory: ./phonebook-backend
         run: npm install
 
@@ -30,10 +29,13 @@ jobs:
 
       - name: Backend test
         working-directory: ./phonebook-backend
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: npm test
 
       # FRONTEND
-      - name: Install frontend dependencies
+
+      - name: Setup frontend
         working-directory: ./phonebook-frontend
         run: npm install
 
@@ -43,8 +45,22 @@ jobs:
 
       - name: Frontend test
         working-directory: ./phonebook-frontend
-        run: npm run test
+        run: npm test -- --run
 
       - name: Frontend build
         working-directory: ./phonebook-frontend
         run: npm run build
+
+      # COPY DIST TO BACKEND
+
+      - name: Copy frontend build to backend
+        run: |
+          rm -rf phonebook-backend/dist
+          cp -r phonebook-frontend/dist phonebook-backend/dist
+
+      # DEPLOY
+
+      - name: Trigger Render deploy
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
